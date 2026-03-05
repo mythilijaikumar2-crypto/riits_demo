@@ -213,12 +213,12 @@ const ProcessSection: React.FC = () => {
                             <div className="absolute inset-10 rounded-full border border-white/5  z-10 pointer-events-none" />
 
                             {/* ── Step image (crossfade) ── */}
-                            <div className="absolute inset-0 flex items-center justify-center p-10">
+                            <div className="absolute inset-0 flex items-center justify-center">
                                 <img
                                     key={displayed}          /* remount triggers CSS fade */
                                     src={STEPS[displayed].image}
                                     alt={STEPS[displayed].title}
-                                    className="w-full h-full object-contain rounded-full select-none"
+                                    className="w-full h-full object-cover select-none"
                                     style={{
                                         opacity: fading ? 0 : 1,
                                         transition: "opacity 220ms ease-in-out",

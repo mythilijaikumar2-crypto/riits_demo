@@ -264,20 +264,14 @@ const Projects = () => {
 
 
         {/* Floating stat badges */}
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        <div className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-slow">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           Residential · Commercial · Industrial
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        </div>
+        <div className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-medium">
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           800+ Projects Delivered
-        </motion.div>
+        </div>
 
         <div className="container-main relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 items-center">

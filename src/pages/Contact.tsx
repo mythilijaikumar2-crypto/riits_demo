@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import SectionHeading from "../components/SectionHeading";
-import { Phone, MessageCircle, MapPin, Mail, Clock } from "lucide-react";
+import { Phone, MessageCircle, MapPin, Mail, Clock, Facebook } from "lucide-react";
 import { TurtleButton } from "../components/TurtleButton";
 
 const Contact = () => {
@@ -23,14 +23,14 @@ const Contact = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          opacity: 0.35;
+          opacity: 0.5;
           mix-blend-mode: screen;
           will-change: transform;
         }
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 50% 50%, rgba(6, 27, 84, 0.4) 0%, #061b54 95%);
+          background: radial-gradient(circle at 50% 50%, rgba(6, 27, 84, 0.1) 0%, rgba(6, 27, 84, 0.7) 100%);
           z-index: 1;
         }
         .hero-grid-lines {
@@ -68,6 +68,11 @@ const Contact = () => {
           filter: blur(40px);
           z-index: 0;
         }
+        @keyframes iconPulse {
+          0% { transform: scale(1) rotate(0deg); }
+          50% { transform: scale(1.1) rotate(6deg); }
+          100% { transform: scale(1) rotate(0deg); }
+        }
       `}</style>
 
       {/* ── CONTACT HERO ── */}
@@ -89,20 +94,14 @@ const Contact = () => {
 
 
         {/* Floating stat badges */}
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        <div className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-slow">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           Available 24/7 For You
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        </div>
+        <div className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-medium">
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           Free Consultation & Site Visit
-        </motion.div>
+        </div>
 
         <div className="container-main relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -148,6 +147,9 @@ const Contact = () => {
                 <TurtleButton href="https://wa.me/919876543210" variant="whatsapp" external className="rounded-xl">
                   <MessageCircle className="w-4 h-4" /> WhatsApp
                 </TurtleButton>
+                <TurtleButton href="https://facebook.com" variant="premium_outline_shimmer" external className="rounded-xl border-blue-400 text-blue-300">
+                  <Facebook className="w-4 h-4" /> Facebook
+                </TurtleButton>
               </motion.div>
             </motion.div>
 
@@ -160,31 +162,70 @@ const Contact = () => {
       <div className="container-main">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {[
-            { icon: <MapPin className="w-6 h-6" />, title: "Address", lines: ["RITS Metal Craft", "Trichy, Tamil Nadu", "India"] },
-            { icon: <Phone className="w-6 h-6" />, title: "Phone", lines: ["+91 98765 43210", "+91 98765 43211"], isLink: true, prefix: "tel:" },
-            { icon: <Clock className="w-6 h-6" />, title: "Working Hours", lines: ["Mon – Sat: 9:00 AM – 7:00 PM", "Sunday: Closed"] },
+            { 
+              icon: <MapPin className="w-6 h-6" />, 
+              title: "Address", 
+              lines: ["RITS Metal Craft", "Trichy, Tamil Nadu", "India"],
+              accent: "bg-blue-500/10 text-blue-600",
+              hoverAccent: "group-hover:bg-blue-600 group-hover:text-white"
+            },
+            { 
+              icon: <Phone className="w-6 h-6" />, 
+              title: "Phone", 
+              lines: ["+91 98765 43210", "+91 98765 43211"], 
+              isLink: true, 
+              prefix: "tel:",
+              accent: "bg-emerald-500/10 text-emerald-600",
+              hoverAccent: "group-hover:bg-emerald-600 group-hover:text-white"
+            },
+            { 
+              icon: <Clock className="w-6 h-6" />, 
+              title: "Working Hours", 
+              lines: ["Mon – Sat: 9:00 AM – 7:00 PM", "Sunday: Closed"],
+              accent: "bg-amber-500/10 text-amber-600",
+              hoverAccent: "group-hover:bg-amber-600 group-hover:text-white"
+            },
           ].map((item, i) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="glass-card rounded-xl p-8 text-center"
+              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+              whileHover={{ y: -10 }}
+              className="group relative bg-white border border-slate-100 rounded-3xl p-10 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500"
             >
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
-                {item.icon}
+              {/* Decorative background element */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+              
+              <div className="relative z-10">
+                <div className={`w-16 h-16 rounded-2xl ${item.accent} ${item.hoverAccent} flex items-center justify-center mx-auto mb-6 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-6 group-hover:animate-[iconPulse_2s_infinite_ease-in-out] shadow-sm`}>
+                  {item.icon}
+                </div>
+                <h3 className="font-heading text-lg font-bold uppercase text-[#061b54] mb-4 tracking-tight group-hover:text-blue-700 transition-colors">
+                  {item.title}
+                </h3>
+                <div className="space-y-2">
+                  {item.lines.map((line) =>
+                    item.isLink ? (
+                      <a 
+                        key={line} 
+                        href={`${item.prefix}${line.replace(/\s/g, "")}`} 
+                        className="block text-base text-slate-500 hover:text-[#061b54] font-medium transition-colors"
+                      >
+                        {line}
+                      </a>
+                    ) : (
+                      <p key={line} className="text-base text-slate-500 font-medium">
+                        {line}
+                      </p>
+                    )
+                  )}
+                </div>
               </div>
-              <h3 className="font-heading text-base font-semibold uppercase text-foreground mb-3">{item.title}</h3>
-              {item.lines.map((line) =>
-                item.isLink ? (
-                  <a key={line} href={`${item.prefix}${line.replace(/\s/g, "")}`} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    {line}
-                  </a>
-                ) : (
-                  <p key={line} className="text-sm text-muted-foreground">{line}</p>
-                )
-              )}
+
+              {/* Bottom decorative bar */}
+              <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 rounded-full opacity-0 group-hover:w-1/3 group-hover:opacity-100 transition-all duration-500 ${item.accent.split(' ')[1].replace('text-', 'bg-')}`} />
             </motion.div>
           ))}
         </div>
@@ -192,15 +233,34 @@ const Contact = () => {
         {/* Quick Actions */}
         <SectionHeading subtitle="Reach Out" title="Quick Contact" />
         <div className="flex flex-wrap justify-center gap-4 mb-16">
-          <a href="tel:+919876543210" className="btn-primary">
+          <motion.a 
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            href="tel:+919876543210" className="btn-primary"
+          >
             <Phone className="w-5 h-5" /> Call Now
-          </a>
-          <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
+          </motion.a>
+          <motion.a 
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="btn-whatsapp"
+          >
             <MessageCircle className="w-5 h-5" /> WhatsApp
-          </a>
-          <a href="mailto:info@ritsmetalcraft.com" className="btn-outline">
+          </motion.a>
+          <motion.a 
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1877F2] text-white px-8 py-3 rounded-lg font-heading font-semibold uppercase tracking-wider text-sm transition-all duration-300 hover:shadow-xl hover:shadow-[#1877F2]/25"
+          >
+            <Facebook className="w-5 h-5" /> Facebook
+          </motion.a>
+          <motion.a 
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            href="mailto:info@ritsmetalcraft.com" className="btn-outline"
+          >
             <Mail className="w-5 h-5" /> Email Us
-          </a>
+          </motion.a>
         </div>
 
         {/* Map placeholder */}

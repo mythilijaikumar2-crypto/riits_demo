@@ -1,10 +1,10 @@
-import { motion } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import { Phone, MessageCircle, ArrowRight, Star, CheckCircle2, Wrench, Home, Building2, Factory, Zap } from "lucide-react";
-import ProcessSection from "../components/ProcessSection";
 import { TurtleButton } from "../components/TurtleButton";
-import resSvcImg from "../assets/service page/3rd view port/residentialservice.png";
-import comSvcImg from "../assets/service page/3rd view port/commercalservice.png";
-import indSvcImg from "../assets/service page/3rd view port/industrialservice.png";
+import resSvcImg from "../assets/residental.jpeg";
+import comSvcImg from "../assets/commercial.jpeg";
+import indSvcImg from "../assets/industial.jpeg";
 
 /* ─── DATA ──────────────────────────────────────────────────────────── */
 
@@ -43,6 +43,32 @@ const stats = [
   { val: "Pan TN", label: "Areas Served", icon: <CheckCircle2 className="w-5 h-5" /> },
 ];
 
+/* ─── ANIMATED COUNTER ──────────────────────────────────────────────── */
+const AnimatedCounter = ({ text }: { text: string }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  
+  const numMatch = text.match(/\d+/);
+  const target = numMatch ? parseInt(numMatch[0], 10) : null;
+  const prefix = numMatch ? text.substring(0, numMatch.index!) : "";
+  const suffix = numMatch ? text.substring(numMatch.index! + numMatch[0].length) : "";
+
+  const [display, setDisplay] = useState(numMatch ? `${prefix}0${suffix}` : text);
+  
+  useEffect(() => {
+    if (inView && target !== null) {
+      const controls = animate(0, target, {
+        duration: 2.5,
+        ease: [0.16, 1, 0.3, 1], // easeOutExpo
+        onUpdate: (val) => setDisplay(`${prefix}${Math.floor(val)}${suffix}`)
+      });
+      return () => controls.stop();
+    }
+  }, [inView, target, prefix, suffix]);
+
+  return <span ref={ref}>{display}</span>;
+};
+
 /* ─── PAGE COMPONENT ─────────────────────────────────────────────────── */
 const Services = () => {
 
@@ -71,20 +97,14 @@ const Services = () => {
           style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
 
         {/* Floating decorative badges */}
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium"
-        >
+        <div className="absolute top-20 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium animate-float-slow">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           15+ Years of Expertise
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-20 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium"
-        >
+        </div>
+        <div className="absolute bottom-20 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium animate-float-medium">
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           800+ Projects Delivered
-        </motion.div>
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -134,23 +154,61 @@ const Services = () => {
         </div>
       </section>
 
-      {/* ── STATS STRIP ───────────────────────────────────────────── */}
-      <section className="py-6 bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* ── STATS SECTION (100vh) ───────────────────────────────────────────── */}
+      <section className="min-h-screen flex items-center justify-center bg-white relative border-b border-slate-100 py-20 overflow-hidden">
+        {/* Animated Background Patterns */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.05),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(26,58,107,0.05),transparent_50%)]" />
+        <div className="absolute -top-[30%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-blue-100/30 blur-[100px] pointer-events-none animate-[spin_60s_linear_infinite]" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          <div className="text-center mb-20 lg:mb-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold uppercase tracking-[0.2em] mb-6 shadow-sm"
+            >
+              <Star className="w-3.5 h-3.5" /> Our Impact
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="font-heading text-4xl sm:text-5xl md:text-6xl font-black text-[#1a3a6b] uppercase tracking-tight"
+            >
+              Proven by the <br className="sm:hidden" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                Numbers
+              </span>
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {stats.map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-slate-50 hover:bg-blue-50 transition-colors group"
+                initial={{ opacity: 0, scale: 0.8, y: 40 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.15, type: "spring", bounce: 0.4 }}
+                className="relative flex flex-col items-center p-8 lg:p-10 rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300 group overflow-hidden"
               >
-                <div className="w-11 h-11 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                  {s.icon}
+                {/* Hover Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                {/* Icon Box */}
+                <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl lg:rounded-3xl bg-slate-50 text-blue-600 flex items-center justify-center mb-6 lg:mb-8 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-300 shadow-sm relative z-10">
+                  <div className="scale-125 lg:scale-150">
+                    {s.icon}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-2xl font-black font-heading text-[#1a3a6b]">{s.val}</div>
-                  <div className="text-xs text-slate-500 uppercase tracking-widest font-medium">{s.label}</div>
+
+                {/* Content */}
+                <div className="text-center relative z-10 w-full">
+                  <div className="text-5xl lg:text-5xl font-black font-heading text-[#1a3a6b] mb-3 tracking-tight group-hover:text-blue-700 transition-colors">
+                    <AnimatedCounter text={s.val} />
+                  </div>
+                  <div className="w-12 h-1 bg-blue-100 mx-auto my-4 rounded-full group-hover:bg-blue-500 transition-colors duration-300" />
+                  <div className="text-xs lg:text-sm text-slate-500 uppercase tracking-[0.14em] lg:tracking-[0.18em] font-bold">
+                    {s.label}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -158,8 +216,6 @@ const Services = () => {
         </div>
       </section>
 
-      {/* ── PROCESS TIMELINE ──────────────────────────────────────── */}
-      <ProcessSection />
 
       {/* ── SERVICE AREAS ─────────────────────────────────────────── */}
       <section className="py-24 bg-white relative overflow-hidden">
@@ -187,26 +243,30 @@ const Services = () => {
                 whileHover={{ y: -8 }}
                 className="group relative rounded-3xl overflow-hidden cursor-default"
               >
-                {/* Gradient header */}
-                <div
-                  className={`bg-gradient-to-br ${area.gradient} p-8 relative overflow-hidden h-48 flex flex-col justify-end`}
-                >
-                  {/* Category Image background */}
-                  <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-500">
-                    <img src={area.image} alt={area.title} className="w-full h-full object-cover mix-blend-overlay" />
+                {/* Image Header */}
+                <div className="relative overflow-hidden h-56 flex flex-col justify-end p-8">
+                  {/* Base Image — fully visible */}
+                  <div className="absolute inset-0 bg-slate-100">
+                    <img src={area.image} alt={area.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   </div>
+
+                  {/* Aesthetic Theme Gradient Overlay (Subtle) */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} mix-blend-multiply opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
+                  
+                  {/* Dark gradient from bottom up to ensure text visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
 
                   <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/20 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                  <div className="relative z-10 flex items-start justify-between mb-2">
-                    <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-white backdrop-blur-sm">
+                  <div className="relative z-10 flex items-start justify-between mb-3">
+                    <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-white backdrop-blur-md shadow-lg border-b-white/10 group-hover:bg-blue-600 transition-colors duration-500">
                       {area.icon}
                     </div>
-                    <span className="text-white/30 font-heading font-black text-4xl">0{i + 1}</span>
+                    <span className="text-white/40 drop-shadow-md font-heading font-black text-4xl group-hover:text-white/80 transition-colors duration-500">0{i + 1}</span>
                   </div>
 
-                  <h3 className="relative z-10 font-heading text-2xl font-black uppercase text-white tracking-wide">
+                  <h3 className="relative z-10 font-heading text-2xl font-black uppercase text-white tracking-wide drop-shadow-lg">
                     {area.title}
                   </h3>
                 </div>

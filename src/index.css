@@ -1,5 +1,5 @@
 /* Google Fonts — Montserrat for headings, Inter for body */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -100,7 +100,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 400;
     text-rendering: optimizeSpeed;
     -webkit-font-smoothing: antialiased;
@@ -116,22 +116,22 @@
   h4,
   h5,
   h6 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
 
   .font-heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
   }
 
   .font-body {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
   .font-display {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
   }
 }
 
@@ -216,8 +216,13 @@
   }
 
   @keyframes why-float {
-    0%, 100% { transform: translateY(0) scale(1.2); }
-    50% { transform: translateY(-20px) scale(1.2); }
+    0%,
+    100% {
+      transform: translateY(0) scale(1.2);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.2);
+    }
   }
 
   .why-card-overlay {
@@ -227,7 +232,11 @@
 
   .why-card:hover .why-card-overlay {
     opacity: 1;
-    background: linear-gradient(180deg, rgba(13, 21, 31, 0.1) 0%, rgba(13, 21, 31, 0.9) 100%) !important;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 21, 31, 0.1) 0%,
+      rgba(13, 21, 31, 0.9) 100%
+    ) !important;
   }
 
   .why-card .relative.z-10 {
@@ -265,8 +274,60 @@
   }
 
   @keyframes shimmer-sweep {
-    0%   { background-position: -100% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* GPU-Accelerated Performance Animations */
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+    will-change: transform;
+  }
+  .animate-float-medium {
+    animation: float-medium 5s ease-in-out infinite;
+    will-change: transform;
+  }
+  .animate-mesh-pulse {
+    animation: mesh-pulse 15s linear infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0) translateZ(0);
+    }
+    50% {
+      transform: translateY(-10px) translateZ(0);
+    }
+  }
+  @keyframes float-medium {
+    0%,
+    100% {
+      transform: translateY(0) translateZ(0);
+    }
+    50% {
+      transform: translateY(12px) translateZ(0);
+    }
+  }
+  @keyframes mesh-pulse {
+    0%,
+    100% {
+      transform: scale(1) translate(0, 0) translateZ(0);
+      opacity: 0.3;
+    }
+    33% {
+      transform: scale(1.1) translate(20px, -10px) translateZ(0);
+      opacity: 0.5;
+    }
+    66% {
+      transform: scale(1.05) translate(-10px, 20px) translateZ(0);
+      opacity: 0.4;
+    }
   }
 }
 
@@ -294,4 +355,3 @@
     transparent 100%
   );
 }
-

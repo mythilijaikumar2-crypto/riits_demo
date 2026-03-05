@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Layers, Ruler, Shield, Search, Wrench, ArrowRight,
-  CheckCircle2, MapPin, Phone
+  CheckCircle2, MapPin, Phone, Star, Quote
 } from "lucide-react";
-import { TurtleButton } from "../components/TurtleButton";
 
 const R = ({ children, delay = 0, dir = "up" }: any) => {
   const v = {
@@ -167,23 +166,29 @@ const FontLoader = () => (
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
       gap: 2.5rem; 
     }
+    /* ── Workflow Cards — fixed height removed, proper centering ── */
     .wf-card {
-      height: 320px;
+      min-height: 300px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: 12px;
-      background-color: var(--white);
+      gap: 0;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border-radius: 24px;
       position: relative;
       overflow: hidden;
-      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-      border: 1px solid var(--sl1);
-      padding: 30px;
-      will-change: transform, background-color;
+      border: 1px solid rgba(226,232,240,0.8);
+      padding: 36px 28px 32px;
+      box-shadow: 0 4px 24px -4px rgba(13,37,87,0.06), 0 1px 4px rgba(0,0,0,0.04);
+      /* GPU-friendly — only transform & opacity animate */
+      will-change: transform;
       transform: translateZ(0);
+      transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1),
+                  box-shadow 0.28s cubic-bezier(0.23, 1, 0.32, 1);
     }
     .wf-card::before {
       content: "";
@@ -191,93 +196,105 @@ const FontLoader = () => (
       height: 100%;
       position: absolute;
       top: 0;
-      border-bottom: 3px solid var(--white);
+      left: 0;
       background: linear-gradient(135deg, var(--navy), var(--blue-7));
       z-index: 0;
-      transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-      transform: scaleY(0);
-      transform-origin: top;
-      will-change: transform;
+      transition: opacity 0.28s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity: 0;
+      will-change: opacity;
     }
-    .wf-card * { z-index: 1; }
+    .wf-card * { z-index: 1; position: relative; }
     .wf-num {
       position: absolute;
-      top: 15px;
+      top: 16px;
       right: 20px;
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 3rem;
+      font-size: 2.6rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.1);
+      color: rgba(13,37,87,0.07);
       line-height: 1;
-      transition: 0.2s;
+      transition: color 0.28s;
+      z-index: 1;
     }
     .wf-icon-box {
-      width: 84px;
-      height: 84px;
+      width: 76px;
+      height: 76px;
       background-color: var(--blue-6);
-      border-radius: 50%;
-      border: 4px solid var(--white);
-      margin-top: 10px;
+      border-radius: 20px;
+      border: 3px solid rgba(255,255,255,0.9);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.28s, box-shadow 0.28s;
+      box-shadow: 0 8px 20px -4px rgba(37,99,235,0.25);
     }
     .wf-content {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-      margin-top: 10px;
+      align-items: center;
+      gap: 6px;
     }
     .wf-step-lbl {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       color: var(--blue-6);
-      transition: 0.2s;
+      transition: color 0.28s;
+      margin-bottom: 2px;
     }
     .wf-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--navy);
       text-transform: uppercase;
-      line-height: 1.2;
+      line-height: 1.15;
+      transition: color 0.28s;
     }
     .wf-desc {
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--sl5);
-      line-height: 1.6;
-      max-width: 240px;
-      margin: 0 auto;
+      line-height: 1.65;
+      max-width: 230px;
+      margin: 8px auto 0;
+      transition: color 0.28s;
     }
+    /* Hover state — GPU only (transform + opacity) */
     .wf-card:hover {
-      transform: translateY(-5px) translateZ(0);
-      box-shadow: 0 30px 60px -15px rgba(13,37,87,0.15);
+      transform: translateY(-8px) translateZ(0);
+      box-shadow: 0 28px 56px -12px rgba(13,37,87,0.18), 0 8px 20px -4px rgba(13,37,87,0.10);
     }
-    .wf-card:hover::before {
-      transform: scaleY(1);
-      border-bottom: none;
-    }
-    .wf-card:hover .wf-title, 
-    .wf-card:hover .wf-desc {
-      color: white;
-    }
-    .wf-card:hover .wf-step-lbl {
-      color: var(--blue-3);
-    }
-    .wf-card:hover .wf-num {
-      color: rgba(255,255,255,0.2);
-    }
+    .wf-card:hover::before { opacity: 1; }
+    .wf-card:hover .wf-title,
+    .wf-card:hover .wf-desc { color: rgba(255,255,255,0.92); }
+    .wf-card:hover .wf-step-lbl { color: #93c5fd; }
+    .wf-card:hover .wf-num { color: rgba(255,255,255,0.15); }
     .wf-card:hover .wf-icon-box {
-      background-color: var(--white);
+      background-color: rgba(255,255,255,0.95);
       color: var(--blue-6) !important;
-      transform: scale(0.9);
-      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+      transform: scale(0.93);
+      box-shadow: 0 0 24px rgba(255,255,255,0.35);
+    }
+    .wf-bg-decor {
+      position: absolute;
+      bottom: -36px;
+      right: -36px;
+      width: 160px;
+      height: 160px;
+      opacity: 0.04;
+      pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      z-index: 0;
+      transform: rotate(-15deg);
+    }
+    .wf-card:hover .wf-bg-decor {
+      opacity: 0.18;
+      transform: rotate(0deg) scale(1.1);
+      color: white;
     }
 
     .mat-card { display: flex; align-items: center; gap: 12px; padding: 1rem 1.4rem; background: var(--white); border-radius: 12px; border: 1.5px solid var(--sl1); font-size: 0.88rem; font-weight: 600; color: var(--navy); transition: 0.3s; }
@@ -373,6 +390,175 @@ const districts = [
   { name: "Dindigul", main: false }
 ];
 
+const reviews = [
+  { name: "Rajesh Kumar", text: "Excellent service and high-quality fabrication work. The team was very professional.", rating: 5, lang: "en" },
+  { name: "Shanmugam", text: "தரமான வேலை மற்றும் சரியான நேரத்தில் முடித்துக் கொடுத்தார்கள். மிக்க நன்றி.", rating: 5, lang: "ta" },
+  { name: "Priya S.", text: "The stainless steel railings installed at my home are top-notch. Highly recommended!", rating: 5, lang: "en" },
+  { name: "Revathi", text: "எங்கள் வீட்டிற்கு அமைத்த ஸ்டெயின்லெஸ் ஸ்டீல் கைப்பிடிகள் மிகவும் அழகாக உள்ளது.", rating: 5, lang: "ta" },
+  { name: "Arun Enterprises", text: "RIITS Metal Craft delivered our industrial shed ahead of schedule. Great project management.", rating: 5, lang: "en" },
+  { name: "Karthik", text: "திருச்சியில் சிறந்த இரும்பு வேலை செய்யும் இடம். நம்பகமான சேவை.", rating: 5, lang: "ta" },
+  { name: "Murali Dharan", text: "Best metal fabricators in Trichy. Their attention to detail is remarkable.", rating: 5, lang: "en" },
+  { name: "Selvam Krishna", text: "வேலைப்பாடு மிகவும் நுணுக்கமாக உள்ளது. விலையும் நியாயமானதாக இருக்கிறது.", rating: 5, lang: "ta" },
+  { name: "Kavitha R.", text: "Very happy with the modern gate design they provided. It really enhanced our home's curb appeal.", rating: 5, lang: "en" },
+  { name: "Vijayakumar", text: "தொழில்முறை அணுகுமுறை மற்றும் தரமான பொருட்கள். பாராட்டுக்கள்!", rating: 5, lang: "ta" },
+  { name: "Suresh Babu", text: "Professional team, transparent pricing, and quality materials. Would definitely hire them again.", rating: 5, lang: "en" },
+  { name: "Shivakumar", text: "எங்கள் தொழிற்சாலைக்கு அமைத்த மேற்கூரை மிகவும் வலுவாக உள்ளது.", rating: 5, lang: "ta" },
+  { name: "Deepak J.", text: "The aluminium window systems are perfect. Noise reduction and aesthetics are both excellent.", rating: 5, lang: "en" },
+  { name: "Bhaskar", text: "புதிய மாடல் கேட் டிசைன்கள் இங்கே கிடைக்கின்றன. மிகவும் திருப்தியாக உள்ளது.", rating: 5, lang: "ta" },
+  { name: "V-Mart Trichy", text: "Impressive structural glazing work for our showroom. Truly world-class quality.", rating: 5, lang: "en" },
+  { name: "Mohan", text: "குறிப்பிட்ட காலத்திற்குள் வேலையை முடித்து கை ஒப்படைத்தார்கள். சிறந்த நிறுவனம்.", rating: 5, lang: "ta" },
+  { name: "Lakshmi Industries", text: "Reliable and efficient. They handled our large-scale industrial project with ease.", rating: 5, lang: "en" },
+  { name: "Anjali M.", text: "The laser-cut elevation panels look stunning. Got many compliments from neighbors.", rating: 5, lang: "en" },
+  { name: "Robert Wilson", text: "Great after-sales support. They came back for minor adjustments immediately when called.", rating: 5, lang: "en" },
+  { name: "Vignesh K.", text: "From design to installation, everything was handled perfectly. Worth every rupee.", rating: 5, lang: "en" },
+  { name: "K. Ramakrishnan", text: "Exceptional quality SS fabrication for our new apartment complex.", rating: 5, lang: "en" },
+  { name: "M. Ganesan", text: "மிகவும் நுணுக்கமான வேலைப்பாடு. திருப்திகரமான சேவை.", rating: 5, lang: "ta" }
+];
+
+const ReviewCard = ({ rev }: { rev: typeof reviews[0] }) => (
+  /* GPU-only hover: only transform changes — no layout reflow */
+  <div
+    className="w-[300px] sm:w-[360px] shrink-0 px-2"
+    style={{ transform: 'translateZ(0)', willChange: 'transform' }}
+  >
+    <div
+      className="
+        relative flex flex-col justify-between h-full
+        bg-white/90 backdrop-blur-sm
+        rounded-2xl border border-slate-200/70
+        px-6 py-6
+        shadow-sm
+        overflow-hidden
+        group/card
+        transition-[transform,box-shadow] duration-300 ease-out
+        hover:-translate-y-2 hover:shadow-[0_20px_48px_-12px_rgba(13,37,87,0.14)]
+        hover:border-blue-200/80
+      "
+      style={{ willChange: 'transform' }}
+    >
+      {/* Subtle glass shimmer top-edge */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-200/60 to-transparent" />
+
+      {/* Quote decoration — decorative only, behind content */}
+      <Quote className="absolute top-3 right-3 w-12 h-12 text-slate-100 group-hover/card:text-blue-100/70 transition-colors duration-500 pointer-events-none" aria-hidden="true" />
+
+      {/* TOP — Stars + review text */}
+      <div className="relative z-10">
+        {/* Star row */}
+        <div className="flex items-center gap-0.5 mb-3">
+          {[...Array(5)].map((_, s) => (
+            <Star key={s} className="w-3 h-3 fill-amber-400 text-amber-400" />
+          ))}
+          <span className="ml-2 text-[9px] font-extrabold text-amber-600 uppercase tracking-widest">5.0</span>
+        </div>
+
+        {/* Review text — line-clamped to keep all cards uniform height */}
+        <p
+          className={`text-slate-600 leading-relaxed text-[0.88rem] font-medium line-clamp-4 ${
+            rev.lang === 'ta' ? '' : 'italic'
+          }`}
+        >
+          &ldquo;{rev.text}&rdquo;
+        </p>
+      </div>
+
+      {/* BOTTOM — divider + profile */}
+      <div className="relative z-10 flex items-center gap-3 pt-4 mt-4 border-t border-slate-100">
+        {/* Avatar */}
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d2557] to-[#2563eb] text-white flex items-center justify-center font-bold text-base shadow shrink-0 select-none">
+          {rev.name.charAt(0)}
+        </div>
+        <div className="min-w-0">
+          <p className="text-[0.85rem] font-black text-[#0d2557] leading-tight truncate">{rev.name}</p>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+            <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-[0.14em]">Verified Client</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+/**
+ * Pure-CSS marquee row — uses CSS animations (marquee-left / marquee-right)
+ * already defined in tailwind.config.ts. Zero JavaScript per-frame,
+ * entirely GPU-composited (only `transform: translateX` changes).
+ * Pauses on hover via `animation-play-state: paused`.
+ */
+const ReviewRow = ({ items, reverse = false }: { items: typeof reviews, reverse?: boolean }) => (
+  <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+    <div
+      className={`flex gap-4 py-3 ${
+        reverse ? 'animate-marquee-right' : 'animate-marquee-left'
+      } hover:[animation-play-state:paused]`}
+      style={{ willChange: 'transform' }}
+    >
+      {/* Duplicate items so the loop is seamless */}
+      {[...items, ...items].map((rev, i) => (
+        <ReviewCard key={i} rev={rev} />
+      ))}
+    </div>
+  </div>
+);
+
+const ReviewsSection = () => {
+  const row1 = reviews.slice(0, 11);
+  const row2 = reviews.slice(11, 22);
+
+  return (
+    <section className="py-20 bg-gradient-to-b from-slate-50 to-white overflow-hidden relative border-t border-slate-100">
+
+      {/* ── Section Header ───────────────────────────────────── */}
+      <div className="ctr mb-14 text-center relative z-20">
+        <R>
+          <div className="flex flex-col items-center gap-4">
+
+            {/* Label pill */}
+            <span className="inline-flex items-center gap-2 bg-white text-blue-700 px-5 py-1.5 rounded-full font-bold text-[0.7rem] tracking-[0.22em] uppercase border border-slate-200 shadow-sm">
+              <Star className="w-3 h-3 fill-blue-600 text-blue-600" />
+              Client Testimonials
+            </span>
+
+            {/* Heading */}
+            <h2 className="dlg text-[#0d2557] tracking-tight leading-tight max-w-xl mx-auto">
+              Trusted by Hundreds of Happy Clients
+            </h2>
+
+            {/* Subtitle */}
+            <p className="text-slate-500 text-[0.95rem] max-w-lg mx-auto leading-relaxed font-medium">
+              Over 800 families and businesses in Trichy trust RIITS Metal Craft. Here's what they say.
+            </p>
+
+            {/* Stats bar */}
+            <div className="flex items-center justify-center gap-6 sm:gap-10 mt-6 pt-6 border-t border-slate-200 w-full max-w-sm mx-auto">
+              {[
+                { val: '800+', lbl: 'Projects' },
+                { val: '5.0', lbl: 'Avg Rating' },
+                { val: '15+', lbl: 'Years' },
+              ].map(({ val, lbl }, i, arr) => (
+                <>
+                  <div key={lbl} className="text-center">
+                    <div className="text-2xl font-black text-[#0d2557]">{val}</div>
+                    <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-0.5">{lbl}</div>
+                  </div>
+                  {i < arr.length - 1 && <div className="w-px h-8 bg-slate-200 shrink-0" />}
+                </>
+              ))}
+            </div>
+          </div>
+        </R>
+      </div>
+
+      {/* ── Marquee rows ─────────────────────────────────────── */}
+      <div className="relative space-y-5 z-20">
+        <ReviewRow items={row1} />
+        <ReviewRow items={row2} reverse />
+      </div>
+    </section>
+  );
+};
+
 /* ════════════════ MAIN ABOUT PAGE ════════════════ */
 const About = () => {
   const navigate = useNavigate();
@@ -392,15 +578,11 @@ const About = () => {
             className="w-full h-full object-cover opacity-30 mix-blend-overlay"
             style={{ willChange: "transform" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--navy)]/90 via-[var(--navy)]/55 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--navy)] via-[var(--navy)]/60 to-transparent z-[1]" />
         </div>
 
         {/* Animated mesh */}
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3], x: [0, 20, 0], y: [0, -20, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="about-mesh"
-        />
+        <div className="about-mesh animate-mesh-pulse" />
 
 
         {/* Grid overlay */}
@@ -408,20 +590,14 @@ const About = () => {
           style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
 
         {/* Floating stat badges */}
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        <div className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-slow">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           Est. 2009 — Trichy, Tamil Nadu
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        </div>
+        <div className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-medium">
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           800+ Projects Completed
-        </motion.div>
+        </div>
 
         <div className="ctr relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -458,17 +634,7 @@ const About = () => {
                 We fuse advanced engineering with master craftsmanship to build structures that endure for generations.
               </motion.p>
 
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                className="flex flex-wrap gap-3"
-              >
-                <TurtleButton to="/products" variant="premium_shimmer" className="rounded-xl">
-                  Explore Products <ArrowRight className="w-4 h-4" />
-                </TurtleButton>
-                <TurtleButton to="/projects" variant="premium_outline_shimmer" className="rounded-xl">
-                  Our Work
-                </TurtleButton>
-              </motion.div>
+
             </motion.div>
 
 
@@ -491,9 +657,11 @@ const About = () => {
               <R key={step} delay={i * 0.02}>
                 <div className="wf-card group">
                   <span className="wf-num">{step}</span>
-                   <div className="wf-icon-box group-hover:scale-110 transition-transform duration-300">
+                  <div className="wf-icon-box group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
                     <Icon className="wf-isvg" style={{ width: 32, height: 32 }} strokeWidth={1.5} />
                   </div>
+                  <Icon className="wf-bg-decor" />
                   <div className="wf-content">
                     <p className="wf-step-lbl">Step {step}</p>
                     <p className="wf-title">{title}</p>
@@ -570,6 +738,9 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* ── CUSTOMER REVIEWS ── */}
+      <ReviewsSection />
 
       {/* ── CTA FOOTER — navy ── */}
       <section className="navy-bg" style={{ padding: "clamp(3.5rem,7vw,6rem) clamp(1.5rem,5vw,5rem)", textAlign: "center", position: "relative", overflow: "hidden" }}>

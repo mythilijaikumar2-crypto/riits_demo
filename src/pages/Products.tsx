@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { TurtleButton } from "../components/TurtleButton";
 
 /* ── Local image imports ── */
@@ -128,7 +128,7 @@ type Product = (typeof productCategories)[0]["products"][0];
 type Category = (typeof productCategories)[0];
 
 /* ── Benefit Card ── */
-const BenefitCard = ({ label, index }: { label: string; index: number }) => {
+const BenefitCard = memo(({ label, index }: { label: string; index: number }) => {
   const detail = benefitDetails[label] ?? { icon: "✅", desc: "Quality guaranteed." };
   return (
     <motion.div
@@ -149,10 +149,10 @@ const BenefitCard = ({ label, index }: { label: string; index: number }) => {
       <p className="text-sm leading-relaxed text-slate-600">{detail.desc}</p>
     </motion.div>
   );
-};
+});
 
 /* ── Product Card ── */
-const ProductCard = ({ product, index }: { product: Product; index: number }) => {
+const ProductCard = memo(({ product, index }: { product: Product; index: number }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -163,7 +163,7 @@ const ProductCard = ({ product, index }: { product: Product; index: number }) =>
       className="card"
     >
       <div className="card-img">
-        <img src={product.image} alt={product.name} className="card-imgs" />
+        <img src={product.image} alt={product.name} loading="lazy" decoding="async" className="card-imgs" />
       </div>
 
       <div className="project-info">
@@ -186,11 +186,12 @@ const ProductCard = ({ product, index }: { product: Product; index: number }) =>
       </div>
     </motion.div>
   );
-};
+});
 
 /* ── Category Section ── */
-const CategorySection = ({ category }: { category: Category }) => (
-  <section id={`section-${category.id}`} className="scroll-mt-24 pb-12">
+const CategorySection = memo(({ category }: { category: Category }) => {
+  return (
+    <section id={`section-${category.id}`} className="scroll-mt-24 pb-12" style={{ contentVisibility: 'auto' }}>
     <div className="mb-8">
       <p className="text-xs font-semibold tracking-wider text-blue-600 uppercase mb-1">
         {category.subtitle}
@@ -219,7 +220,8 @@ const CategorySection = ({ category }: { category: Category }) => (
       </div>
     </div>
   </section>
-);
+  );
+});
 
 /* ── Main Products Page ── */
 const Products = () => {
@@ -387,20 +389,14 @@ const Products = () => {
           style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
 
         {/* Floating stat badges */}
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        <div className="absolute top-24 right-[8%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-slow">
           <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
           5 Product Categories
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10"
-        >
+        </div>
+        <div className="absolute bottom-24 left-[6%] hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-white/80 text-xs font-medium z-10 animate-float-medium">
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           Grade-A Certified Materials
-        </motion.div>
+        </div>
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-8">
           <div className="grid lg:grid-cols-2 gap-10 items-center">

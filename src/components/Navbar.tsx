@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -14,25 +14,15 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { scrollYProgress, scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const location = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-aware background + progress bar
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setScrolled(scrollY > 20);
-
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 20 && !scrolled) setScrolled(true);
+    if (latest <= 20 && scrolled) setScrolled(false);
+  });
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -69,8 +59,7 @@ const Navbar = () => {
       {/* Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 z-[60] h-[3px] bg-gradient-to-r from-primary via-secondary to-accent origin-left"
-        style={{ width: `${scrollProgress}%` }}
-        transition={{ ease: "linear" }}
+        style={{ scaleX: scrollYProgress }}
       />
 
       <motion.nav
