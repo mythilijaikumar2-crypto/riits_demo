@@ -266,11 +266,13 @@ const Index = () => {
                 <motion.button
                   key={item.title}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-full text-left px-5 py-2.5 rounded-xl font-heading text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 border-2 ${currentSlide === index
+                  onMouseEnter={() => setCurrentSlide(index)}
+                  className={`w-full text-left px-5 py-2.5 rounded-xl font-heading text-xs font-bold uppercase tracking-[0.15em] transition-all duration-150 border-2 ${currentSlide === index
                     ? "bg-[hsl(225,73%,35%)] text-white border-[hsl(225,73%,35%)] shadow-lg scale-105"
                     : "bg-white text-[hsl(225,73%,35%)]/60 border-transparent hover:bg-slate-50 hover:text-[hsl(225,73%,35%)]"
                     }`}
                   whileHover={{ x: 8 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {item.title}
                 </motion.button>
@@ -295,14 +297,14 @@ const Index = () => {
                   </motion.div>
 
                   <div className="relative flex-1 flex items-center justify-center overflow-hidden min-h-[260px]">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence>
                       <motion.div
                         key={services[currentSlide].title}
-                        initial={{ x: 200, opacity: 0 }}
+                        initial={{ x: 100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -200, opacity: 0 }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
-                        className="w-full max-w-lg bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden flex flex-col"
+                        exit={{ x: -100, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "circOut" }}
+                        className="w-full max-w-lg bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden flex flex-col absolute"
                       >
                         <div className="bg-[hsl(225,73%,35%)] p-6 text-center flex flex-col items-center">
                           <span className="text-4xl mb-3 bg-white/10 p-4 rounded-xl backdrop-blur-md">
@@ -349,7 +351,7 @@ const Index = () => {
       <ProcessSection />
 
       {/* FOOTER */}
-      <footer className="footer-bg bg-[#061b54] text-white overflow-hidden" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}>
+      <footer className="footer-bg bg-slate-950 text-white overflow-hidden" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}>
         <div className="px-8 sm:px-12 lg:px-20 pt-16 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-10 max-w-7xl mx-auto">
             <div className="flex-1">

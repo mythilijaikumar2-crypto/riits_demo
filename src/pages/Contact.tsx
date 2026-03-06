@@ -12,7 +12,7 @@ const Contact = () => {
           min-height: 100vh;
           display: flex;
           align-items: center;
-          background: #061b54;
+          background: #020617;
           overflow: hidden;
           transform: translateZ(0);
           backface-visibility: hidden;
@@ -30,7 +30,7 @@ const Contact = () => {
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 50% 50%, rgba(6, 27, 84, 0.1) 0%, rgba(6, 27, 84, 0.7) 100%);
+          background: radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0.1) 0%, rgba(2, 6, 23, 0.7) 100%);
           z-index: 1;
         }
         .hero-grid-lines {
@@ -202,7 +202,7 @@ const Contact = () => {
                 <div className={`w-16 h-16 rounded-2xl ${item.accent} ${item.hoverAccent} flex items-center justify-center mx-auto mb-6 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-6 group-hover:animate-[iconPulse_2s_infinite_ease-in-out] shadow-sm`}>
                   {item.icon}
                 </div>
-                <h3 className="font-heading text-lg font-bold uppercase text-[#061b54] mb-4 tracking-tight group-hover:text-blue-700 transition-colors">
+                <h3 className="font-heading text-lg font-bold uppercase text-slate-900 mb-4 tracking-tight group-hover:text-blue-700 transition-colors">
                   {item.title}
                 </h3>
                 <div className="space-y-2">
@@ -211,7 +211,7 @@ const Contact = () => {
                       <a 
                         key={line} 
                         href={`${item.prefix}${line.replace(/\s/g, "")}`} 
-                        className="block text-base text-slate-500 hover:text-[#061b54] font-medium transition-colors"
+                        className="block text-base text-slate-500 hover:text-slate-900 font-medium transition-colors"
                       >
                         {line}
                       </a>

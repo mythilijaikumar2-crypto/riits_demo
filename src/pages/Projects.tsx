@@ -1,5 +1,8 @@
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import SectionHeading from "../components/SectionHeading";
 import { TurtleButton } from "../components/TurtleButton";
+import { X } from "lucide-react";
 
 import res1 from "../assets/service page/our works/ss railing installing.webp";
 import res2 from "../assets/service page/our works/ms gate installing.webp";
@@ -21,11 +24,13 @@ import ele3 from "../assets/service page/our works/Heritage Restoration – Temp
 
 type ProjectCategory = {
   title: string;
-  projects: {
-    title: string;
-    desc: string;
-    image?: string;
-  }[];
+  projects: Project[];
+};
+
+type Project = {
+  title: string;
+  desc: string;
+  image?: string;
 };
 
 const projectCategories: ProjectCategory[] = [
@@ -66,6 +71,18 @@ const projectCategories: ProjectCategory[] = [
 ];
 
 const Projects = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Prevent scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [selectedProject]);
+
   return (
     <main className="pt-20">
       <style>{`
@@ -74,7 +91,7 @@ const Projects = () => {
           min-height: 90vh;
           display: flex;
           align-items: center;
-          background: #061b54;
+          background: #020617;
           overflow: hidden;
           transform: translateZ(0);
           backface-visibility: hidden;
@@ -85,14 +102,14 @@ const Projects = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          opacity: 0.8;
+          opacity: 0.6;
           mix-blend-mode: normal;
           will-change: transform;
         }
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to right, #061b54 0%, rgba(6, 27, 84, 0.7) 25%, transparent 60%);
+          background: linear-gradient(to right, #020617 0%, rgba(2, 6, 23, 0.7) 25%, transparent 60%);
           z-index: 1;
         }
         .hero-grid-lines {
@@ -116,150 +133,9 @@ const Projects = () => {
           to { background-position: 200% center; }
         }
 
-        /* --- New Premium Flexbox Project Cards --- */
-        .projects-flex-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 1.5rem;
-          perspective: 1000px;
-        }
-
-        .project-flex-card {
-          flex: 1;
-          min-width: 300px;
-          height: 480px;
-          position: relative;
-          background: rgba(255, 255, 255, 0.02);
-          backdrop-filter: blur(15px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-          overflow: hidden;
-          cursor: pointer;
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-          display: flex;
-          flex-direction: column;
-          z-index: 1;
-        }
-
-        .project-flex-card::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.2);
-          z-index: 2;
-          transition: background-color 0.5s ease;
-        }
-
-        .project-flex-card:hover {
-          flex: 1.8;
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(147, 197, 253, 0.4);
-          transform: translateY(-8px) translateZ(20px);
-          box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
-        }
-
-        .project-flex-card:hover::before {
-          background: rgba(0, 0, 0, 0.7);
-        }
-
-        .card-inner-content {
-          position: absolute;
-          inset: 0;
-          z-index: 3;
-          padding: 40px;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          transition: all 0.5s ease;
-        }
-
-        .card-bg-icon {
-          position: absolute;
-          top: 40px;
-          left: 40px;
-          font-size: 5rem;
-          opacity: 0.1;
-          transition: all 0.6s ease;
-          transform: scale(1);
-          color: #93c5fd;
-          z-index: 1;
-        }
-
-        .project-flex-card:hover .card-bg-icon {
-          opacity: 0.3;
-          transform: scale(1.2) rotate(-10deg);
-          top: 30px;
-        }
-
-        .card-tag {
-          font-size: 0.65rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: #93c5fd;
-          margin-bottom: 12px;
-          opacity: 0.6;
-          transition: all 0.4s ease;
-        }
-
-        .project-flex-card:hover .card-tag {
-          opacity: 1;
-          letter-spacing: 0.3em;
-        }
-
-        .card-title {
-          font-family: 'Barlow Condensed', sans-serif;
-          font-size: 2rem;
-          font-weight: 800;
-          color: white;
-          line-height: 1.1;
-          margin-bottom: 16px;
-          max-width: 90%;
-          transition: all 0.5s ease;
-        }
-
-        .card-desc {
-          font-size: 0.95rem;
-          color: rgba(255, 255, 255, 0.6);
-          line-height: 1.6;
-          height: 0;
-          opacity: 0;
-          overflow: hidden;
-          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .project-flex-card:hover .card-desc {
-          height: 100px;
-          opacity: 1;
-          margin-top: 20px;
-        }
-
-        .card-corner-shape {
-          position: absolute;
-          bottom: -20px;
-          right: -20px;
-          width: 80px;
-          height: 80px;
-          background: #2563eb;
-          filter: blur(40px);
-          opacity: 0.2;
-          border-radius: 50%;
-          transition: all 0.5s ease;
-        }
-
-        .project-flex-card:hover .card-corner-shape {
-          width: 120px;
-          height: 120px;
-          opacity: 0.5;
-        }
-
         @media (max-width: 768px) {
-          .project-flex-card {
-            min-width: 100%;
-            height: 380px;
-          }
-          .project-flex-card:hover {
-            flex: 1;
+          .projects-hero {
+            min-height: 70vh;
           }
         }
       `}</style>
@@ -327,31 +203,48 @@ const Projects = () => {
         <section key={cat.title} className={`section-padding ${catIdx % 2 === 0 ? "bg-background" : "bg-muted"}`}>
           <div className="container-main">
             <SectionHeading subtitle={`${cat.title} Projects`} title={cat.title} />
-            <div className="projects-flex-container">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
               {cat.projects.map((p) => (
                 <div
                   key={p.title}
-                  className="project-flex-card group"
+                  className="group flex flex-col md:flex-row bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-200/60 dark:border-slate-800 shadow-xl shadow-slate-200/20 dark:shadow-none hover:shadow-2xl hover:shadow-primary/10 dark:hover:border-primary/30 transition-all duration-500"
                 >
                   {p.image && (
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110"
-                    />
+                    <div className="md:w-5/12 aspect-[16/10] md:aspect-auto overflow-hidden relative">
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-500" />
+                    </div>
                   )}
-                  <div className="card-bg-icon font-heading relative z-10">🏗️</div>
-                  <div className="card-corner-shape relative z-10" />
 
-                  <div className="card-inner-content relative z-10">
-                    <div className="card-tag">Project Detail</div>
-                    <h3 className="card-title">{p.title}</h3>
-                    <div className="card-desc">
-                      <p>{p.desc}</p>
-                      <div className="mt-6 flex items-center gap-3 text-blue-300 font-bold text-xs tracking-widest uppercase">
-                        <span>View Specifications</span>
-                        <div className="w-8 h-[1px] bg-blue-400" />
-                      </div>
+                  <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                    <div className="inline-flex items-center gap-2 mb-4 group/tag">
+                      <div className="w-6 h-[2px] bg-primary scale-x-100 group-hover/tag:scale-x-150 transition-transform origin-left" />
+                      <span className="text-primary dark:text-primary/80 text-[10px] font-black uppercase tracking-[0.3em]">
+                        {cat.title} Project
+                      </span>
+                    </div>
+
+                    <h3 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 leading-tight group-hover:text-primary transition-colors">
+                      {p.title}
+                    </h3>
+
+                    <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 line-clamp-2 md:line-clamp-3">
+                      {p.desc}
+                    </p>
+
+                    <div className="mt-auto">
+                      <TurtleButton 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-xl border-primary text-primary hover:bg-primary hover:text-white px-6"
+                        onClick={() => setSelectedProject(p)}
+                      >
+                        Read More
+                      </TurtleButton>
                     </div>
                   </div>
                 </div>
@@ -360,6 +253,89 @@ const Projects = () => {
           </div>
         </section>
       ))}
+
+      {/* ── PROJECT DETAIL MODAL ── */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-10">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md cursor-zoom-out"
+            />
+
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-5xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-6 right-6 z-10 p-3 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-all hover:scale-110 active:scale-95"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-hidden">
+                {/* Image Side */}
+                <div className="lg:w-3/5 h-[300px] sm:h-[400px] lg:h-auto relative overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  {selectedProject.image && (
+                    <img
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+
+                {/* Content Side */}
+                <div className="lg:w-2/5 p-8 sm:p-12 flex flex-col justify-center bg-white dark:bg-slate-900">
+                  <div className="inline-flex items-center gap-2 mb-6">
+                    <div className="w-8 h-[2px] bg-primary" />
+                    <span className="text-primary text-xs font-black uppercase tracking-[0.3em]">
+                      Project Overview
+                    </span>
+                  </div>
+
+                  <h2 className="font-heading text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+                    {selectedProject.title}
+                  </h2>
+
+                  <div className="space-y-4">
+                    <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed">
+                      {selectedProject.desc}
+                    </p>
+                    
+                    <div className="pt-8 border-t border-slate-100 dark:border-slate-800">
+                      <p className="text-slate-500 dark:text-slate-500 text-sm italic">
+                        "Delivering precision and excellence in every structure we build."
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-10">
+                    <TurtleButton
+                      variant="primary"
+                      className="rounded-2xl px-10"
+                      href="tel:+919876543210"
+                    >
+                      Enquire Now
+                    </TurtleButton>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </main>
   );
 };

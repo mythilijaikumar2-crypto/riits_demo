@@ -18,8 +18,8 @@ const R = ({ children, delay = 0, dir = "up" }: any) => {
     <motion.div
       initial={{ opacity: 0, ...v }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-10px" }}
-      transition={{ duration: 0.25, delay, ease: "easeOut" }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -314,70 +314,96 @@ const FontLoader = () => (
     .stat-grid-row {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+      gap: 1.25rem;
     }
     @media (min-width: 1024px) {
       .stat-grid-row {
         grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
       }
     }
     .about-stat-card {
-      background: white;
-      padding: 40px 20px;
-      border-radius: 32px;
-      border: 1px solid rgba(37, 99, 235, 0.08);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 45px 25px;
+      border-radius: 36px;
+      border: 1px solid rgba(37, 99, 235, 0.1);
       text-align: center;
       position: relative;
       overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-      box-shadow: 0 4px 30px rgba(13, 37, 87, 0.04);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 15px 35px -5px rgba(13, 37, 87, 0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      z-index: 1;
     }
     .about-stat-card:hover {
-      transform: translateY(-12px);
-      border-color: rgba(37, 99, 235, 0.3);
-      box-shadow: 0 40px 80px -15px rgba(37, 99, 235, 0.15);
+      transform: translateY(-15px) scale(1.02);
+      border-color: rgba(37, 99, 235, 0.4);
+      background: white;
+      box-shadow: 0 45px 90px -20px rgba(37, 99, 235, 0.2);
     }
     .about-stat-val {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 900;
       line-height: 1;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       background: linear-gradient(135deg, var(--navy) 0%, var(--blue-6) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: transform 0.5s ease;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
     .about-stat-card:hover .about-stat-val {
-      transform: scale(1.1);
+      transform: scale(1.1) translateY(-2px);
     }
     .about-stat-lbl {
-      font-size: 0.72rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       color: var(--sl5);
-      max-width: 120px;
+      max-width: 140px;
+      transition: color 0.4s ease;
+    }
+    .about-stat-card:hover .about-stat-lbl {
+      color: var(--navy);
+    }
+    .about-stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--blue-6), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: -1;
+    }
+    .about-stat-card:hover::after {
+      opacity: 0.05;
     }
     .about-stat-card::before {
       content: '';
       position: absolute;
       width: 100%;
-      height: 4px;
+      height: 6px;
       bottom: 0;
       left: 0;
-      background: linear-gradient(90deg, var(--blue-6), var(--blue-3));
+      background: linear-gradient(90deg, var(--blue-6), var(--blue-3), var(--blue-6));
+      background-size: 200% 100%;
       transform: scaleX(0);
-      transition: transform 0.5s ease;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
       transform-origin: left;
     }
     .about-stat-card:hover::before {
       transform: scaleX(1);
+      animation: side-shimmer 2s linear infinite;
+    }
+    @keyframes side-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
     }
   `}</style>
 );
@@ -572,6 +598,34 @@ const ReviewRow = ({ items, reverse = false }: { items: typeof reviews, reverse?
   </div>
 );
 
+const Counter = ({ value, duration = 2 }: { value: string; duration?: number }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const numericValue = parseInt(value, 10);
+  const isNumeric = !isNaN(numericValue);
+
+  return (
+    <motion.span
+      onViewportEnter={() => {
+        if (!isNumeric) return;
+        let start = 0;
+        const end = numericValue;
+        const range = end - start;
+        const stepTime = Math.abs(Math.floor((duration * 1000) / range));
+        
+        const timer = setInterval(() => {
+          start += 1;
+          setDisplayValue(start);
+          if (start >= end) clearInterval(timer);
+        }, Math.max(stepTime, 16));
+      }}
+    >
+      {isNumeric ? displayValue : value}
+      {isNumeric && value.includes('+') && '+'}
+      {isNumeric && value.includes('%') && '%'}
+    </motion.span>
+  );
+};
+
 const ReviewsSection = () => {
   const row1 = reviews.slice(0, 11);
   const row2 = reviews.slice(11, 22);
@@ -725,13 +779,15 @@ const About = () => {
               <R key={i} delay={stat.delay} dir="up">
                 <div className="about-stat-card group">
                   {/* Decorative background glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   
-                  <div className="about-stat-val">{stat.val}</div>
+                  <div className="about-stat-val">
+                    <Counter value={stat.val} duration={1.5 + (i * 0.2)} />
+                  </div>
                   <div className="about-stat-lbl">{stat.lbl}</div>
 
                   {/* Micro-interaction ring */}
-                  <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-blue-500/20 animate-pulse opacity-0 group-hover:opacity-100" />
+                  <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-blue-500/10 border border-blue-500/20 animate-pulse opacity-0 group-hover:opacity-100 transition-all duration-500" />
                 </div>
               </R>
             ))}

@@ -482,7 +482,7 @@ const Products = () => {
         .animated-mail .letter-border {
           height: 10px;
           width: 100%;
-          background: repeating-linear-gradient(-45deg, #061b54, #061b54 8px, transparent 8px, transparent 18px);
+          background: repeating-linear-gradient(-45deg, #020617, #020617 8px, transparent 8px, transparent 18px);
         }
         
         .animated-mail .letter-title {
@@ -491,7 +491,7 @@ const Products = () => {
           margin-right: 30px;
           font-size: 13px;
           font-weight: 800;
-          color: #061b54;
+          color: #020617;
           line-height: 1.1;
         }
         
@@ -646,7 +646,7 @@ const Products = () => {
 
       {/* ─── Premium Tab Navigation (Automated) ─── */}
       <nav
-        className="sticky top-0 z-50 bg-[#061b54]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-4 transition-all duration-300"
+        className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-4 transition-all duration-300"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >

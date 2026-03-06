@@ -52,15 +52,15 @@ const Services = () => {
   return (
     <main className="overflow-hidden" style={{ transform: "translateZ(0)" }}>
       {/* ── HERO ──────────────────────────────────────────────────── */}
-      <section className="relative h-screen flex flex-col justify-center bg-[#061b54] overflow-hidden">
+      <section className="relative h-screen flex flex-col justify-center overflow-hidden bg-slate-950">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
           <img
             src="/src/assets/services hero page .png"
-            className="w-full h-full object-cover opacity-30 mix-blend-overlay"
+            className="w-full h-full object-cover opacity-60"
             alt="Services hero"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#061b54]/90 via-[#061b54]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/30 to-transparent" />
         </div>
 
         {/* Grid overlay */}
