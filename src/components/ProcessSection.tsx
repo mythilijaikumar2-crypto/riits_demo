@@ -200,10 +200,10 @@ const ProcessSection: React.FC = () => {
                     <div className="flex items-center justify-center relative">
 
                         {/* Glow behind circle */}
-                        <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-red-500/20 blur-3xl" />
+                        <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-blue-500/20 blur-3xl" />
 
-                        {/* Main red circle */}
-                        <div className="relative w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-700 shadow-2xl shadow-red-900/40 flex flex-col items-center justify-center overflow-hidden">
+                        {/* Main blue circle */}
+                        <div className="relative w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 shadow-2xl shadow-blue-500/50 flex flex-col items-center justify-center overflow-hidden">
 
                             {/* Gloss overlay */}
                             <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/5 to-white/15 z-10 pointer-events-none" />

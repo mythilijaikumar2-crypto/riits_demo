@@ -309,6 +309,76 @@ const FontLoader = () => (
       .about-vision { max-width: 55%; }
       .about-mission { max-width: 52%; }
     }
+
+    /* Premium Stats Grid Styles */
+    .stat-grid-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (min-width: 1024px) {
+      .stat-grid-row {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+    }
+    .about-stat-card {
+      background: white;
+      padding: 40px 20px;
+      border-radius: 32px;
+      border: 1px solid rgba(37, 99, 235, 0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 4px 30px rgba(13, 37, 87, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-stat-card:hover {
+      transform: translateY(-12px);
+      border-color: rgba(37, 99, 235, 0.3);
+      box-shadow: 0 40px 80px -15px rgba(37, 99, 235, 0.15);
+    }
+    .about-stat-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue-6) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.5s ease;
+    }
+    .about-stat-card:hover .about-stat-val {
+      transform: scale(1.1);
+    }
+    .about-stat-lbl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--sl5);
+      max-width: 120px;
+    }
+    .about-stat-card::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(90deg, var(--blue-6), var(--blue-3));
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+      transform-origin: left;
+    }
+    .about-stat-card:hover::before {
+      transform: scaleX(1);
+    }
   `}</style>
 );
 
@@ -431,8 +501,8 @@ const ReviewCard = ({ rev }: { rev: typeof reviews[0] }) => (
         overflow-hidden
         group/card
         transition-[transform,box-shadow] duration-300 ease-out
-        hover:-translate-y-2 hover:shadow-[0_20px_48px_-12px_rgba(13,37,87,0.14)]
-        hover:border-blue-200/80
+        hover:-translate-y-2 hover:shadow-[0_20px_48px_-12px_rgba(37,99,235,0.12)]
+        hover:border-blue-300/50
       "
       style={{ willChange: 'transform' }}
     >
@@ -465,7 +535,7 @@ const ReviewCard = ({ rev }: { rev: typeof reviews[0] }) => (
       {/* BOTTOM — divider + profile */}
       <div className="relative z-10 flex items-center gap-3 pt-4 mt-4 border-t border-slate-100">
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d2557] to-[#2563eb] text-white flex items-center justify-center font-bold text-base shadow shrink-0 select-none">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-400 text-white flex items-center justify-center font-bold text-base shadow shrink-0 select-none">
           {rev.name.charAt(0)}
         </div>
         <div className="min-w-0">
@@ -507,7 +577,7 @@ const ReviewsSection = () => {
   const row2 = reviews.slice(11, 22);
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 to-white overflow-hidden relative border-t border-slate-100">
+    <section className="py-20 bg-gradient-to-b from-blue-50/50 via-white to-blue-50/30 overflow-hidden relative border-t border-blue-100/50">
 
       {/* ── Section Header ───────────────────────────────────── */}
       <div className="ctr mb-14 text-center relative z-20">
@@ -567,7 +637,7 @@ const About = () => {
       <FontLoader />
 
       {/* ── HERO / ABOUT US SECTION ── */}
-      <section className="relative min-h-screen flex flex-col justify-center bg-[var(--navy)] overflow-hidden pt-20">
+      <section className="relative min-h-[85vh] lg:min-h-screen flex flex-col justify-center bg-[var(--navy)] overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
           <motion.img
@@ -599,7 +669,7 @@ const About = () => {
           800+ Projects Completed
         </div>
 
-        <div className="ctr relative z-10">
+        <div className="ctr relative z-10 lg:-translate-y-12">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* Left copy */}
             <motion.div
@@ -638,6 +708,33 @@ const About = () => {
             </motion.div>
 
 
+          </div>
+        </div>
+      </section>
+
+      {/* ── AT A GLANCE STATS GRID ── */}
+      <section className="relative z-20 -mt-20 lg:-mt-24 mb-10">
+        <div className="ctr">
+          <div className="stat-grid-row">
+            {[
+              { val: "800+", lbl: "Projects Completed", delay: 0.1 },
+              { val: "15+", lbl: "Years Experience", delay: 0.2 },
+              { val: "100%", lbl: "Client Satisfaction", delay: 0.3 },
+              { val: "Pan TN", lbl: "Areas Served", delay: 0.4 }
+            ].map((stat, i) => (
+              <R key={i} delay={stat.delay} dir="up">
+                <div className="about-stat-card group">
+                  {/* Decorative background glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="about-stat-val">{stat.val}</div>
+                  <div className="about-stat-lbl">{stat.lbl}</div>
+
+                  {/* Micro-interaction ring */}
+                  <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-blue-500/20 animate-pulse opacity-0 group-hover:opacity-100" />
+                </div>
+              </R>
+            ))}
           </div>
         </div>
       </section>

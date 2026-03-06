@@ -245,6 +245,23 @@ const CategorySection = memo(({ category }: { category: Category }) => {
 /* ── Main Products Page ── */
 const Products = () => {
   const [activeTab, setActiveTab] = useState(productCategories[0].id);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Automation: Auto-cycle through categories every 8 seconds
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setActiveTab((prev) => {
+        const currentIndex = productCategories.findIndex(c => c.id === prev);
+        const nextIndex = (currentIndex + 1) % productCategories.length;
+        return productCategories[nextIndex].id;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
   const activeCategory = productCategories.find((c) => c.id === activeTab) || productCategories[0];
 
   return (
@@ -627,26 +644,68 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ─── Tab Navigation ─── */}
-      <nav className="sticky top-0 z-50 bg-[#061b54] border-b border-indigo-900/50 shadow-2xl mt-[1cm]">
-        <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-wrap justify-center gap-3 py-4">
-          {productCategories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveTab(cat.id)}
-              className={`whitespace-nowrap flex-shrink-0 rounded-xl px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition-all duration-300 ${activeTab === cat.id
-                ? "bg-white text-[#061b54] shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105"
-                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
-                }`}
-            >
-              {cat.title}
-            </button>
-          ))}
+      {/* ─── Premium Tab Navigation (Automated) ─── */}
+      <nav
+        className="sticky top-0 z-50 bg-[#061b54]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-4 transition-all duration-300"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4">
+            {productCategories.map((cat) => {
+              const isActive = activeTab === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveTab(cat.id);
+                    setIsPaused(true); // Pause on manual interaction
+                  }}
+                  className="relative group px-5 py-2.5 rounded-xl transition-all duration-500 outline-none"
+                >
+                  {/* Active Indicator (Animated Pill) */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTabPill"
+                      className="absolute inset-0 bg-white rounded-xl shadow-[0_10px_25px_-4px_rgba(255,255,255,0.3)] overflow-hidden"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    >
+                      {/* Automation Progress Indicator */}
+                      {!isPaused && (
+                        <motion.div
+                          key={`progress-${cat.id}`}
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: 4, ease: "linear" }}
+                          className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500/20 origin-left"
+                        />
+                      )}
+                    </motion.div>
+                  )}
+
+                  {/* Hover State Background */}
+                  {!isActive && (
+                    <div className="absolute inset-0 bg-white/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100 border border-white/5" />
+                  )}
+
+                  {/* Content */}
+                  <span className={`relative z-10 text-[0.7rem] sm:text-[0.75rem] font-black uppercase tracking-[0.18em] transition-colors duration-300 ${isActive ? "text-[#0d2557]" : "text-white/60 group-hover:text-white"
+                    }`}>
+                    {cat.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </nav>
 
       {/* ─── Active Category Content ─── */}
-      <div className="mx-auto max-w-7xl px-6 py-16 md:px-8">
+      <div
+        className="mx-auto max-w-7xl px-6 py-16 md:px-8"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
