@@ -1,40 +1,66 @@
-import { motion } from "framer-motion";
 import SectionHeading from "../components/SectionHeading";
 import { TurtleButton } from "../components/TurtleButton";
 
-const projectCategories = [
+import res1 from "../assets/service page/our works/ss railing installing.webp";
+import res2 from "../assets/service page/our works/ms gate installing.webp";
+import res3 from "../assets/service page/our works/aluminium window installation.png";
+import res4 from "../assets/service page/our works/elevation work installing.png";
+
+import com1 from "../assets/service page/our works/Showroom Facade – Trichy Main Road.webp";
+import com2 from "../assets/service page/our works/Rolling Shutters – Commercial Complex.webp";
+import com3 from "../assets/service page/our works/Office Partition – IT Park.webp";
+import com4 from "../assets/service page/our works/Glass Entrance.webp";
+
+import ind1 from "../assets/service page/our works/Factory Shed – SIDCO Industrial Estate.webp";
+import ind2 from "../assets/service page/our works/Warehouse Shutters – Manachanallur.jpg";
+import ind3 from "../assets/service page/our works/Structural Steel – Construction Site.jpg";
+
+import ele1 from "../assets/service page/our works/Full Elevation – Residential Complex.jpg";
+import ele2 from "../assets/service page/our works/Facade Upgrade – Commercial Building.jpg";
+import ele3 from "../assets/service page/our works/Heritage Restoration – Temple Town.avif";
+
+type ProjectCategory = {
+  title: string;
+  projects: {
+    title: string;
+    desc: string;
+    image?: string;
+  }[];
+};
+
+const projectCategories: ProjectCategory[] = [
   {
     title: "Residential",
     projects: [
-      { title: "SS Railing Installation – Trichy", desc: "Brushed stainless steel balcony railings with glass infill for a 3-storey residence." },
-      { title: "Modern MS Gate – Srirangam", desc: "Geometric-patterned mild steel main gate with motorized operation." },
-      { title: "Aluminium Windows – Thillai Nagar", desc: "Full-house aluminium sliding window system with tinted glass." },
-      { title: "Elevation Work – KK Nagar", desc: "ACP cladding and decorative louvers for a residential villa." },
+      { title: "SS Railing Installation – Trichy", desc: "Brushed stainless steel balcony railings with glass infill for a 3-storey residence.", image: res1 },
+      { title: "Modern MS Gate – Srirangam", desc: "Geometric-patterned mild steel main gate with motorized operation.", image: res2 },
+      { title: "Aluminium Windows – Thillai Nagar", desc: "Full-house aluminium sliding window system with tinted glass.", image: res3 },
+      { title: "Elevation Work – KK Nagar", desc: "ACP cladding and decorative louvers for a residential villa.", image: res4 },
     ],
   },
   {
     title: "Commercial",
     projects: [
-      { title: "Showroom Facade – Trichy Main Road", desc: "Structural glazing with ACP cladding for a multi-brand showroom." },
-      { title: "Rolling Shutters – Commercial Complex", desc: "Motorized rolling shutters for 12 shop units." },
-      { title: "Office Partition – IT Park", desc: "Frameless toughened glass partitions for corporate office space." },
-      { title: "Glass Entrance – Hotel Lobby", desc: "Toughened glass swing doors with SS hardware and canopy." },
+      { title: "Showroom Facade – Trichy Main Road", desc: "Structural glazing with ACP cladding for a multi-brand showroom.", image: com1 },
+      { title: "Rolling Shutters – Commercial Complex", desc: "Motorized rolling shutters for 12 shop units.", image: com2 },
+      { title: "Office Partition – IT Park", desc: "Frameless toughened glass partitions for corporate office space.", image: com3 },
+      { title: "Glass Entrance – Hotel Lobby", desc: "Toughened glass swing doors with SS hardware and canopy.", image: com4 },
     ],
   },
   {
     title: "Industrial",
     projects: [
-      { title: "Factory Shed – SIDCO Industrial Estate", desc: "Large-span MS structural shed with GI roofing sheets." },
-      { title: "Warehouse Shutters – Manachanallur", desc: "Heavy-duty industrial rolling shutters for warehouse complex." },
-      { title: "Structural Steel – Construction Site", desc: "MS I-beam and column fabrication for multi-storey building." },
+      { title: "Factory Shed – SIDCO Industrial Estate", desc: "Large-span MS structural shed with GI roofing sheets.", image: ind1 },
+      { title: "Warehouse Shutters – Manachanallur", desc: "Heavy-duty industrial rolling shutters for warehouse complex.", image: ind2 },
+      { title: "Structural Steel – Construction Site", desc: "MS I-beam and column fabrication for multi-storey building.", image: ind3 },
     ],
   },
   {
     title: "Elevation",
     projects: [
-      { title: "Full Elevation – Residential Complex", desc: "Complete ACP + HPL cladding with aluminium louvers and SS railings." },
-      { title: "Facade Upgrade – Commercial Building", desc: "Decorative laser-cut panels with LED backlighting integration." },
-      { title: "Heritage Restoration – Temple Town", desc: "MS decorative gates and railings matching traditional Trichy architecture." },
+      { title: "Full Elevation – Residential Complex", desc: "Complete ACP + HPL cladding with aluminium louvers and SS railings.", image: ele1 },
+      { title: "Facade Upgrade – Commercial Building", desc: "Decorative laser-cut panels with LED backlighting integration.", image: ele2 },
+      { title: "Heritage Restoration – Temple Town", desc: "MS decorative gates and railings matching traditional Trichy architecture.", image: ele3 },
     ],
   },
 ];
@@ -81,17 +107,13 @@ const Projects = () => {
         }
         .shimmer-text {
           background: linear-gradient(90deg, #60a5fa 0%, #67e8f9 50%, #2563eb 100%);
+          background-size: 200% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          animation: shimmer 3s linear infinite;
         }
         @keyframes shimmer {
           to { background-position: 200% center; }
-        }
-        .float-sketch {
-          position: absolute;
-          opacity: 0.15;
-          pointer-events: none;
-          z-index: 2;
         }
 
         /* --- New Premium Flexbox Project Cards --- */
@@ -123,10 +145,9 @@ const Projects = () => {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, transparent 0%, rgba(13, 37, 87, 0.8) 100%);
+          background: rgba(0, 0, 0, 0.2);
           z-index: 2;
-          opacity: 0.6;
-          transition: opacity 0.5s ease;
+          transition: background-color 0.5s ease;
         }
 
         .project-flex-card:hover {
@@ -138,7 +159,7 @@ const Projects = () => {
         }
 
         .project-flex-card:hover::before {
-          opacity: 0.9;
+          background: rgba(0, 0, 0, 0.7);
         }
 
         .card-inner-content {
@@ -245,34 +266,15 @@ const Projects = () => {
 
       {/* ── PROJECTS HERO ── */}
       <section className="projects-hero">
-        <motion.div
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.8, y: [0, -5, 0] }}
-          transition={{
-            scale: { duration: 1.5, ease: "easeOut" },
-            opacity: { duration: 1.5, ease: "easeOut" },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-          }}
-          className="absolute inset-0 z-0 overflow-hidden"
-        >
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-80">
           <img
             src="/src/assets/our work hero page .png"
             alt="Background"
             className="hero-bg-img"
           />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, delay: 0.5 }}
-          className="hero-overlay"
-        />
-        <motion.div
-          initial={{ scale: 1, opacity: 0.1 }}
-          animate={{ scale: 1.2, opacity: 0.03 }}
-          transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-          className="hero-grid-lines"
-        />
+        </div>
+        <div className="hero-overlay" />
+        <div className="hero-grid-lines" />
 
 
         {/* Floating stat badges */}
@@ -288,49 +290,33 @@ const Projects = () => {
         <div className="container-main relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* Left copy */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.3 } } }}
-            >
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-xs font-semibold uppercase tracking-widest mb-4"
-              >
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-xs font-semibold uppercase tracking-widest mb-4">
                 <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
                 Our Masterpieces
-              </motion.div>
+              </div>
 
-              <motion.h1
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-none tracking-tight text-white mb-4"
-              >
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-none tracking-tight text-white mb-4">
                 Projects<br />
                 <span className="shimmer-text">
                   Portfolio.
                 </span><br />
                 Our Best Work.
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                className="text-white/70 text-base leading-relaxed max-w-md mb-7"
-              >
+              <p className="text-white/70 text-base leading-relaxed max-w-md mb-7">
                 From complex industrial structures to elegant residential gates — explore how we blend precision engineering with architectural vision across Tamil Nadu.
-              </motion.p>
+              </p>
 
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                className="flex flex-wrap gap-3"
-              >
+              <div className="flex flex-wrap gap-3">
                 <TurtleButton href="tel:+919876543210" variant="premium_shimmer" className="rounded-xl">
                   <span>📞</span> Call Now
                 </TurtleButton>
                 <TurtleButton href="https://wa.me/919876543210" variant="whatsapp" external className="rounded-xl">
                   <span>💬</span> WhatsApp
                 </TurtleButton>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
 
           </div>
@@ -342,19 +328,22 @@ const Projects = () => {
           <div className="container-main">
             <SectionHeading subtitle={`${cat.title} Projects`} title={cat.title} />
             <div className="projects-flex-container">
-              {cat.projects.map((p, i) => (
-                <motion.div
+              {cat.projects.map((p) => (
+                <div
                   key={p.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.7, delay: i * 0.1 }}
                   className="project-flex-card group"
                 >
-                  <div className="card-bg-icon font-heading">🏗️</div>
-                  <div className="card-corner-shape" />
+                  {p.image && (
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110"
+                    />
+                  )}
+                  <div className="card-bg-icon font-heading relative z-10">🏗️</div>
+                  <div className="card-corner-shape relative z-10" />
 
-                  <div className="card-inner-content">
+                  <div className="card-inner-content relative z-10">
                     <div className="card-tag">Project Detail</div>
                     <h3 className="card-title">{p.title}</h3>
                     <div className="card-desc">
@@ -365,7 +354,7 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
