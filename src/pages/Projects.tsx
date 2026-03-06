@@ -45,7 +45,7 @@ const Projects = () => {
       <style>{`
         .projects-hero {
           position: relative;
-          min-height: 100vh;
+          min-height: 90vh;
           display: flex;
           align-items: center;
           background: #061b54;
@@ -59,14 +59,14 @@ const Projects = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          opacity: 0.4;
-          mix-blend-mode: overlay;
+          opacity: 0.8;
+          mix-blend-mode: normal;
           will-change: transform;
         }
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 50% 50%, rgba(6, 27, 84, 0.4) 0%, #061b54 95%);
+          background: linear-gradient(to right, #061b54 0%, rgba(6, 27, 84, 0.7) 25%, transparent 60%);
           z-index: 1;
         }
         .hero-grid-lines {
@@ -80,11 +80,9 @@ const Projects = () => {
           mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%);
         }
         .shimmer-text {
-          background: linear-gradient(90deg, #ffffff 0%, #93c5fd 50%, #ffffff 100%);
-          background-size: 200% auto;
+          background: linear-gradient(90deg, #60a5fa 0%, #67e8f9 50%, #2563eb 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmer 4s linear infinite;
         }
         @keyframes shimmer {
           to { background-position: 200% center; }
@@ -248,10 +246,14 @@ const Projects = () => {
       {/* ── PROJECTS HERO ── */}
       <section className="projects-hero">
         <motion.div
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="absolute inset-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.8, y: [0, -5, 0] }}
+          transition={{
+            scale: { duration: 1.5, ease: "easeOut" },
+            opacity: { duration: 1.5, ease: "easeOut" },
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+          }}
+          className="absolute inset-0 z-0 overflow-hidden"
         >
           <img
             src="/src/assets/our work hero page .png"
@@ -259,8 +261,18 @@ const Projects = () => {
             className="hero-bg-img"
           />
         </motion.div>
-        <div className="hero-overlay" />
-        <div className="hero-grid-lines" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, delay: 0.5 }}
+          className="hero-overlay"
+        />
+        <motion.div
+          initial={{ scale: 1, opacity: 0.1 }}
+          animate={{ scale: 1.2, opacity: 0.03 }}
+          transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+          className="hero-grid-lines"
+        />
 
 
         {/* Floating stat badges */}
@@ -294,7 +306,7 @@ const Projects = () => {
                 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-none tracking-tight text-white mb-4"
               >
                 Projects<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-600">
+                <span className="shimmer-text">
                   Portfolio.
                 </span><br />
                 Our Best Work.
@@ -302,7 +314,7 @@ const Projects = () => {
 
               <motion.p
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                className="text-white/65 text-base leading-relaxed max-w-md mb-7"
+                className="text-white/70 text-base leading-relaxed max-w-md mb-7"
               >
                 From complex industrial structures to elegant residential gates — explore how we blend precision engineering with architectural vision across Tamil Nadu.
               </motion.p>
@@ -325,40 +337,40 @@ const Projects = () => {
         </div>
       </section>
 
-    {projectCategories.map((cat, catIdx) => (
-      <section key={cat.title} className={`section-padding ${catIdx % 2 === 0 ? "bg-background" : "bg-muted"}`}>
-        <div className="container-main">
-          <SectionHeading subtitle={`${cat.title} Projects`} title={cat.title} />
-          <div className="projects-flex-container">
-            {cat.projects.map((p, i) => (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, delay: i * 0.1 }}
-                className="project-flex-card group"
-              >
-                <div className="card-bg-icon font-heading">🏗️</div>
-                <div className="card-corner-shape" />
-                
-                <div className="card-inner-content">
-                  <div className="card-tag">Project Detail</div>
-                  <h3 className="card-title">{p.title}</h3>
-                  <div className="card-desc">
-                    <p>{p.desc}</p>
-                    <div className="mt-6 flex items-center gap-3 text-blue-300 font-bold text-xs tracking-widest uppercase">
-                      <span>View Specifications</span>
-                      <div className="w-8 h-[1px] bg-blue-400" />
+      {projectCategories.map((cat, catIdx) => (
+        <section key={cat.title} className={`section-padding ${catIdx % 2 === 0 ? "bg-background" : "bg-muted"}`}>
+          <div className="container-main">
+            <SectionHeading subtitle={`${cat.title} Projects`} title={cat.title} />
+            <div className="projects-flex-container">
+              {cat.projects.map((p, i) => (
+                <motion.div
+                  key={p.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.7, delay: i * 0.1 }}
+                  className="project-flex-card group"
+                >
+                  <div className="card-bg-icon font-heading">🏗️</div>
+                  <div className="card-corner-shape" />
+
+                  <div className="card-inner-content">
+                    <div className="card-tag">Project Detail</div>
+                    <h3 className="card-title">{p.title}</h3>
+                    <div className="card-desc">
+                      <p>{p.desc}</p>
+                      <div className="mt-6 flex items-center gap-3 text-blue-300 font-bold text-xs tracking-widest uppercase">
+                        <span>View Specifications</span>
+                        <div className="w-8 h-[1px] bg-blue-400" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    ))}
+        </section>
+      ))}
     </main>
   );
 };
