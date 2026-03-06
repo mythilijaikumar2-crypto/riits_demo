@@ -14,7 +14,7 @@ const serviceAreas = [
     icon: <Home className="w-6 h-6" />,
     color: "#2563eb",
     gradient: "from-blue-600 to-indigo-800",
-    image: resSvcImg,
+    image: comSvcImg,
     items: ["Home gates & grills", "Balcony railings", "Staircase handrails", "Window systems", "Elevation work"],
   },
   {
@@ -22,7 +22,7 @@ const serviceAreas = [
     icon: <Building2 className="w-6 h-6" />,
     color: "#0f766e",
     gradient: "from-teal-600 to-emerald-800",
-    image: comSvcImg,
+    image: indSvcImg,
     items: ["Showroom facades", "Office partitions", "Structural glazing", "Rolling shutters", "ACP cladding"],
   },
   {
@@ -30,7 +30,7 @@ const serviceAreas = [
     icon: <Factory className="w-6 h-6" />,
     color: "#b45309",
     gradient: "from-amber-600 to-orange-800",
-    image: indSvcImg,
+    image: resSvcImg,
     items: ["Factory sheds", "Warehouse structures", "Heavy-duty shutters", "Structural steel", "Industrial gates"],
   },
 ];
@@ -47,14 +47,14 @@ const stats = [
 const AnimatedCounter = ({ text }: { text: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  
+
   const numMatch = text.match(/\d+/);
   const target = numMatch ? parseInt(numMatch[0], 10) : null;
   const prefix = numMatch ? text.substring(0, numMatch.index!) : "";
   const suffix = numMatch ? text.substring(numMatch.index! + numMatch[0].length) : "";
 
   const [display, setDisplay] = useState(numMatch ? `${prefix}0${suffix}` : text);
-  
+
   useEffect(() => {
     if (inView && target !== null) {
       const controls = animate(0, target, {
@@ -252,7 +252,7 @@ const Services = () => {
 
                   {/* Aesthetic Theme Gradient Overlay (Subtle) */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} mix-blend-multiply opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
-                  
+
                   {/* Dark gradient from bottom up to ensure text visibility */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
 
